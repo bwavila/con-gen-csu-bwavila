@@ -1,0 +1,164 @@
+---
+title: "About Me"
+author: "Brian Avila"
+output:
+  html_document:
+    toc: yes
+  word_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+bibliography: references.bib
+---
+
+# Who I am and where I came from
+
+I went to [Colorado State University](https://www.colostate.edu/) as an undergraduate and earned a bachelors degree in physics.  After graduating I fell into a fisheries technician job and found out how much fun fisheries work was.  I became a research associate for the Colorado Cooperative Fish and Wildlife Research Unit (COOP Unit) and worked on whirling disease resistant Rainbow Trout in Colorado.  I was then able to get my Masters and PhD in the COOP Unit from 2014-2021.  Currently, I am a post-doc doing quantitative ecology and population genetics for Colorado Parks and Wildlife.  
+
+My top-four favorite leisure activities are:
+
+1. Big Game Hunting
+2. Playing paintball
+3. Making Knives
+4. Working out at the gym
+
+
+Here is a picture of me in the field with a large Brown Trout that we captured in a relatively smaller stream.
+
+```{r me_pic, echo=FALSE, out.width="500px"}
+knitr::include_graphics("images/brian.jpg", auto_pdf = TRUE)
+```
+
+
+# Research Interests
+
+I am a quantitative ecologist interested in research that informs management.  I use field and lab studies in addition to statistics to help management biologists.  I am currently intersted in using population genetics and genomics to answer managment questions in Colorado.
+
+## Influential papers
+
+One of my goals going through graduate school was to become proficient in Bayesian modeling.  The primary reference for MCMC in statistics is @gelfand1990sampling, however I find that the book by @hooten2019bringing allowed a deeper understanding of Bayesian ecological modeling and provided me with the tools to work through any Bayesian model.  One concept that keeps coming up with my collaborations with others is Bayesian model selection and I have been using @hooten2015guide as a reference for different methods available in the Bayesian framework.
+
+
+## The mathematics behind my research
+
+I use different statistical approaches in my research (Frequentist, Likelihood, and Bayesian).  Many of my close peers would classify me as a "Bayesian".  Bayesian inference uses Bayes’ theorem which was developed by Thomas Bayes and other mathematical properties later developed by Pierre Simon Laplace @doll2018introduction.  Bayes’ theorem (Equation 1) can be derived by using the general rules of probability.  Bayes’ theorem describes the probability of model parameter values conditional on collected data.
+$$
+[\mathbf{\theta} \mid y] = \frac{[y \mid \mathbf{\theta}] [\mathbf{\theta}]}{\int [y \mid \mathbf{\theta}][\mathbf{\theta}]} \; \; (1)
+$$
+The left hand side of the equation is the posterior distribution of the model parameters.  The right hand side of the equation is likelihood distribution multiplied by prior distribution, divided by the marginal distribution of the data.  
+
+The marginal distribution of the data is likely impossible to do by hand so Markov chain Monte Carlo (MCMC) algorithms are use to computationally solve for the posterior (like what you would see in Equation 2).
+
+$$
+[p, S, S_{0}, \sigma^2,\mid y] \propto \prod_{i=1}^{n}\prod_{j=1}^{J} [y_{i,j} \mid p_{i,j}][p_{i,j} \mid S, S_{0}, \sigma^2][S][S_{0}][\sigma^2] \; \; (2)
+$$
+
+## My computing experience
+
+I first learned how to code in C.  I wrote a few programs over the years but have not coded in C for a very long time.  Here is the very first C program I wrote:
+
+```c
+	// Hello World Program
+
+#include <stdio.h>
+int main()
+{
+	printf("Hello World!\n");
+	return 0;
+}
+```
+
+The most recent code that was not R or statistical analysis was using Snakemake.  I was recently introduced to Snakemake and python.  Here is my Snakemake file that allows me to run R scripts to manipulate a database for Passive Integrated Transponder (PIT) tagged Rainbow Trout in the Grand Canyon.  When the database is updated with new data the Snakemake file goes through specific data manipulation, set out in R scripts, so I can plug in the new encounter histories and covariate data into my large multi-state integrated model looking at Rainbow Trout movement in the Grand Canyon.
+```
+rule load_database:
+  input:
+    script = "source_code/Data_Management/Script_Load_DataBase.R"
+
+  output:
+    output_Database = "Output/Data/Colorado_River_Data_MR_and_CPUE_Reduced_Years.rda"
+ 
+  shell:
+    "Rscript {input.script}"
+
+
+rule make_cpue_data:
+  input:
+    script = "source_code/Data_Management/Script_Make_CPUE_Data.R"
+
+  output:
+    output_Database = "Output/Data/CPUE_Data.rda"
+ 
+  shell:
+    "Rscript {input.script}"
+
+
+rule mr_catch_number:
+  input:
+    script = "source_code/Data_Management/Script_MR_Catch.R"
+  output:
+    output_MR_Numbers = "Output/Data/Mark_Recap_Catch_Data.rda"
+ 
+  shell:
+    "Rscript {input.script}"
+
+
+rule cpue_catch_number:
+  input:
+    script = "source_code/Data_Management/Script_CPUE_Catch.R"
+  output:
+    output_MR_Numbers = "Output/Data/CPUE_Catch_Data.rda"
+  log:
+    "log/cpue_catch_number.log"
+  shell:
+    "Rscript {input.script} >&"
+
+    
+rule cpue_effort:
+  input:
+    script = "source_code/Data_Management/Script_CPUE_Effort.R"
+  output:
+    output_MR_Numbers = "Output/Data/Effort.rda"
+  log:
+    "log/cpue_effort.log"
+  shell:
+    "Rscript {input.script} >&"
+
+
+rule make_encounter_histories:
+  input:
+    script = "source_code/Data_Management/Script_Make_Encounter_Histories.R"
+  output:
+    output_MR_Numbers = "Output/Data/Encounter_Histories_Final.rda"
+  log:
+    "log/make_encounter_histories.log"
+  shell:
+    "Rscript {input.script} >&"
+```
+
+
+## What I hope to get out of this class
+
+I hope to get:
+
+* A better understanding of the coding needed to do high-throughput bioinformatics
+* Understanding of the available tools or how to create my own tools to do bioinformatics of genetic data
+* Gain a better understanding of custer computing and uses to do bioinformatics work.
+
+# Evaluating some R code
+
+Here is a short R code snipet.  In my work I have to check how Bayesian priors look to see if they are informative or not.  For example probabilities (bounded between 0 and 1) such as detection probability within an observation process may have environmental covariates that affect detection.  The inverse logit link function allows the link between values that are bounded between [-$\infty$,$\infty$] to probablities bounded between [0,1].
+$$
+p = \text{inverse logit}(\beta_{0} + \beta_1X_{1} + ...+\beta_{n}X_{n})
+$$
+
+The R code creates a histogram of a million values with a mean of zero and a standard deviation of 1.4 within the inverse logit.
+```{r, message=FALSE}
+# checking what priors look like
+
+hist(plogis(rnorm(1000000,0,1.4)))
+
+
+```
+
+# Citations
+
