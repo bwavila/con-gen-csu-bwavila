@@ -41,7 +41,7 @@ One of my goals going through graduate school was to become proficient in Bayesi
 
 ## The mathematics behind my research
 
-I use different statistical approaches in my research (Frequentist, Likelihood, and Bayesian).  Many of my close peers would classify me as a "Bayesian".  Bayesian inference uses Bayes’ theorem which was developed by Thomas Bayes and other mathematical properties later developed by Pierre Simon Laplace @doll2018introduction.  Bayes’ theorem (Equation 1) can be derived by using the general rules of probability.  Bayes’ theorem describes the probability of model parameter values conditional on collected data.
+I use different statistical approaches in my research (Frequentist, Likelihood, and Bayesian).  Many of my close peers would classify me as a "Bayesian".  Bayesian inference uses Bayes’ theorem which was developed by Thomas Bayes and other mathematical properties later developed by Pierre Simon Laplace [@doll2018introduction].  Bayes’ theorem (Equation 1) can be derived by using the general rules of probability.  Bayes’ theorem describes the probability of model parameter values conditional on collected data.
 $$
 [\mathbf{\theta} \mid y] = \frac{[y \mid \mathbf{\theta}] [\mathbf{\theta}]}{\int [y \mid \mathbf{\theta}][\mathbf{\theta}]} \; \; (1)
 $$
